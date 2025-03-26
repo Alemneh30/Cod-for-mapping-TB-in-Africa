@@ -6,7 +6,7 @@
 
 ###############user specifications#########################################
 #define number of samples 
-nn = 3000#(10000 for final results, 150 for fast results)
+nn = 10000#(10000 for final results, 150 for fast results)
 aggfactor <- 5#factor of aggregation for final maps
 popt <- 5 #threshold for population to mask areas
 # unit: persons per square kilometer.
@@ -24,7 +24,6 @@ allrun <- FALSE
 #if allrun is FALSE it will run one model based on mozout and popilter choices
 ###############end user specifications#########################################
 
-# source("Kefyalew_3.R") if you want to run the whole script once, you can also use CTRL+SHIFT + S
 #INLA used to fit Bayesian models
 list.of.packages <- c("INLA")
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
@@ -49,8 +48,7 @@ if(allrun==TRUE){
   combinations <-data.frame(popfilter=popfilter,mozout=mozout)
 }
 #intial data loading
-#response data
-#malariaAtlas::listRaster(printed=TRUE)
+
 
 #study area
 Africa <- rnaturalearth::ne_countries()
@@ -198,7 +196,6 @@ save(rs2,rs,myarea,TB,popden, path_input,path_output,Africa,file=paste0(path_out
 
 #********************************************************
 pt <-TB
-#remove observations above village level
 pt <- data.frame(TB=pt$`Total TB cases`,Nscreen = pt$Number_examined, x=pt$Longitude, y=pt$Latitude)
 pt <- pt[complete.cases(pt),]
 
@@ -230,14 +227,6 @@ covariate_z <- covariate_z[paste0(keep.dat)]
 corr_matrix <- cor(covariate_z,use="complete.obs")
 write.csv(corr_matrix,paste0(path_output,"/csv/covariate_correlation.csv"))
 
-#remove variables that are correlated
-#     TMP	 PCP	       ALT	         ACH	        ACC       	POP
-# TMP	1	-0.294126043	-0.609494571	0.337040993	0.341287977	-0.497103296
-# PCP	-0.294126043	1	0.29859667	-0.213891208	-0.091222307	0.176260989
-# ALT	-0.609494571	0.29859667	1	0.037889976	0.15453342	0.090377128
-# ACH	0.337040993	-0.213891208	0.037889976	1	0.751531617	-0.743854957
-# ACC	0.341287977	-0.091222307	0.15453342	0.751531617	1	-0.796935445
-# POP	-0.497103296	0.176260989	0.090377128	-0.743854957	-0.796935445	1
 
 #pop and acc highly correlated so we remove pop
 #ach and acc highly correlated so we remove ach
@@ -536,7 +525,7 @@ writeRaster(TBcount[[2]], paste0(path_output,'/','tif/TBcount_median.tif'), over
 writeRaster(TBcount[[1]], paste0(path_output,'/','tif/TBcount_lower.tif'), overwrite=TRUE)
 writeRaster(TBcount[[3]], paste0(path_output,'/','tif/TBcount_upper.tif'), overwrite=TRUE)
 
-#Kefyalew: check with official statistics if the estimation is not too far from real estimates for the country
+#check with official statistics if the estimation is not too far from real estimates for the country
 casesest <- data.frame(cellStats(TBcount, sum))
 write.csv(casesest,paste0(path_output,"/csv/estimatedcases.csv"))
 
