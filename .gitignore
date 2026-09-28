@@ -1,0 +1,39 @@
+# Analysis data and generated outputs
+INPUT/
+OUTPUT/
+
+# R session/workspace files
+.Rhistory
+.RData
+.Ruserdata
+
+# RStudio project-specific files
+.Rproj.user/
+
+# renv local library/cache (keep renv.lock and renv/activate.R tracked)
+renv/library/
+renv/staging/
+renv/python/
+renv/local/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Temporary/editor files
+*~
+*.swp
+*.swo
+*.tmp
+*.temp
+
+# Logs
+*.log
+
+# Jupyter checkpoints, if notebooks are used
+.ipynb_checkpoints/
